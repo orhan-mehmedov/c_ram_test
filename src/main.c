@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include <malloc.h>
+
 #define RAM_TO_BE_ALLOCATED (1*1024*1024*1024lu)
 #define CHUNK_SIZE (1024lu)/*[bytes]*/
 #define TIME_TO_WAIT_IN_FULL_ALLOCATION (30lu) /*[s]*/
@@ -47,6 +49,11 @@ int main(int argc, char* argv[])
 	sleep(TIME_TO_WAIT_IN_FULL_ALLOCATION);
 
 	deallocate_ram(&head, RAM_TO_BE_FREED, CHUNK_SIZE, 1);
+
+	if (1 == malloc_trim(0))//release ass much ass possible to the system!
+	{
+		printf("Some memory was released back to the system!\n");
+	}
 
 	printf("RAM in use now is %lu bytes! Going to sleep for %lu seconds!\n",
 			RAM_TO_BE_ALLOCATED-RAM_TO_BE_FREED,
